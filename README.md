@@ -1,4 +1,4 @@
-# DFNY Group API
+# DFNY Composite API
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -7,9 +7,9 @@
 1. Activate Python virtual env
 2. `pip install awsebcli`
 3. **If your virtual env files are stored in the application folder, add them to `.ebignore` to prevent them from being uploaded to ElasticBeanstalk.**
-4. *One-time*: `eb init` -> 1 -> DNYF-API-Group -> N -> Python -> Python 3.8 -> N -> N
-5. Create EB environment and deploy existing code: `eb create dnyf-group-api-prod --single`
-6. Deploy new code: `eb deploy dnyf-group-api-prod`
+4. *One-time*: `eb init` -> 1 -> DNYF-API-Composite -> N -> Python -> Python 3.8 -> N -> N
+5. Create EB environment and deploy existing code: `eb create dnyf-composite-api-prod --single`
+6. Deploy new code: `eb deploy dnyf-composite-api-prod`
 7. Terminate EB environment: `eb terminate`
 
 Terminating cleans up all resources associated with the environment.
@@ -68,25 +68,25 @@ docker network create dnyfnet
 ```
 
 ```bash
-docker build --tag dnyf-group-api .
+docker build --tag dnyf-composite-api .
 ```
 
 ```bash
-docker run --name dnyf-group-api \
+docker run --name dnyf-composite-api \
     -p 8000:8000 \
     --network dnyfnet \
-    -d dnyf-group-api
+    -d dnyf-composite-api
 ```
 
 ```bash
-docker run --rm --name dnyf-group-db \
+docker run --rm --name dnyf-composite-db \
     --network dnyfnet \
     -v mysql:/var/lib/mysql \
     -v mysql_config:/etc/mysql \
     -e MYSQL_ROOT_PASSWORD=dbuser \
     -e MYSQL_USER=dbuser \
     -e MYSQL_PASSWORD=dbuser \
-    -e MYSQL_DATABASE=dnyf-group-db \
+    -e MYSQL_DATABASE=dnyf-composite-db \
     -p 3306:3306 \
     -d mysql:8.0
 ```

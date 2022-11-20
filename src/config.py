@@ -29,7 +29,7 @@ class ProdSettings(Settings):
 class DevSettings(Settings):
     # Environment variables will take priority, so DATABASE_URL is overridden
     # when running on Docker because `localhost` cannot be used
-    database_url = "mysql+pymysql://dbuser:dbuser@localhost:3306/dnyf-group-db"
+    database_url = "mysql+pymysql://dbuser:dbuser@localhost:3306/dnyf-composite-db"
 
 
 if os.getenv("PROD_FLAG"):

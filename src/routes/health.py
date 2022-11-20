@@ -11,6 +11,6 @@ router = APIRouter()
 @router.get("/health", tags=["health"])
 async def get_health():
     t = str(datetime.now())
-    msg = {"name": "Groups Api", "health": "Good", "at time": t}
+    msg = {"name": "Composite Api", "health": "Good", "at time": t}
 
     return msg
