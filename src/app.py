@@ -4,7 +4,6 @@ Main API entrypoint
 
 # Third party imports
 from fastapi import FastAPI
-from starlette.concurrency import iterate_in_threadpool
 
 # Local application imports
 from .routes import group
