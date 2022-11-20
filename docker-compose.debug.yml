@@ -6,9 +6,11 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: ["sh", "-c", "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 -m uvicorn src.app:app --host 0.0.0.0 --port 8000 --reload"]
+    command: ["sh", "-c", "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 -m uvicorn src.app:app --host 0.0.0.0 --port 8010 --reload"]
+    environment:
+      UVICORN_PORT: "8010"
     ports:
-      - 8000:8000
+      - 8010:8010
       - 5678:5678
     volumes:
       - ./:/app

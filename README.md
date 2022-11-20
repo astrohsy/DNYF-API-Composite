@@ -73,7 +73,7 @@ docker build --tag dnyf-composite-api .
 
 ```bash
 docker run --name dnyf-composite-api \
-    -p 8000:8000 \
+    -p 8010:8010 \
     --network dnyfnet \
     -d dnyf-composite-api
 ```
