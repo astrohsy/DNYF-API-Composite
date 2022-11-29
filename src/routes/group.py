@@ -3,7 +3,7 @@ Group endpoint routing
 """
 # Third party imports
 from typing import Optional
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 
 from src.core_microservice import GroupsMicroservice
 
