@@ -5,20 +5,15 @@ TODO: Methods returning fake data to be replaced with actual calls to microservi
 """
 
 import copy
-from typing import Optional
+from typing import List, Optional
+
+from src.schema.group import GroupGetDto, GroupGetDtoPaginated, GroupPostDto, UserInfo
 
 
-def get_user_info(user_id: int):
-    """
-    Helper function for returning user information from User and Contacts microservices
-    """
-    user_name = UserMicroservice.get_user_name(user_id)
-    user_contacts = ContactsMicroservice.get_user_contacts(user_id)
+# START FAKE DATA
+next_group_id = 4
 
-    return {"id": user_id, **user_name, **user_contacts}
-
-
-fake_groups_data = [
+fake_group_data = [
     {
         "data": {
             "group_name": "OS Group",
@@ -96,69 +91,6 @@ fake_group_members = {
     },
 }
 
-
-class GroupsMicroservice:
-    @staticmethod
-    def get_all_groups(offset: int, limit: int, group_name: Optional[str]):
-        """
-        TODO: replace with call to `GET groups/`
-        TODO: pass through offset, limit, and search query parameters
-        TODO: preserve pagination links returned from the Groups microservice
-        """
-        groups = []
-        for group in fake_groups_data:
-            group_data = copy.deepcopy(group["data"])
-
-            # Add group members
-            group_data["members"] = GroupsMicroservice.get_group_members(
-                group_data["group_id"]
-            )
-
-            fake_pagination_links = [
-                {
-                    "href": "...",
-                    "rel": "get_next_group_page",
-                    "type": "GET",
-                },
-                {
-                    "href": "...",
-                    "rel": "get_prev_group_page",
-                    "type": "GET",
-                },
-            ]
-
-            groups.append(group_data)
-
-        return {"data": groups, "links": fake_pagination_links}
-
-    @staticmethod
-    def get_single_group(group_id: int):
-        """
-        TODO: replace with call to `GET groups/{group_id}`
-        """
-        group = list(
-            filter(
-                lambda group: group["data"]["group_id"] == group_id, fake_groups_data
-            )
-        )[0]
-        group_copy = copy.deepcopy(group)
-
-        # Add group members
-        group_copy["data"]["members"] = GroupsMicroservice.get_group_members(group_id)
-
-        return group_copy
-
-    @staticmethod
-    def get_group_members(group_id: int):
-        """
-        TODO: replace with call to `GET groups/{group_id}/members`
-        """
-        members = fake_group_members[str(group_id)]["data"]
-
-        # Return members with name and contact info
-        return [get_user_info(member["member_id"]) for member in members]
-
-
 fake_user_data = [
     {
         "data": {
@@ -182,26 +114,6 @@ fake_user_data = [
         }
     },
 ]
-
-
-class UserMicroservice:
-    @staticmethod
-    def get_user_name(user_id: int):
-        """
-        TODO: replace with call to `GET /users/{id}`
-        """
-        user_data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_user_data)
-        )[0]["data"]
-
-        # Do it like this in case the User microservice returns more than just name
-        name = {
-            "first_name": user_data["first_name"],
-            "last_name": user_data["last_name"],
-        }
-
-        return name
-
 
 fake_contacts_data = [
     {
@@ -229,6 +141,157 @@ fake_contacts_data = [
         }
     },
 ]
+# END FAKE DATA
+
+
+def get_user_info(user_id: int):
+    """
+    Helper function for returning user information from User and Contacts microservices
+    """
+    user_name = UserMicroservice.get_user_name(user_id)
+    user_contacts = ContactsMicroservice.get_user_contacts(user_id)
+
+    return {"id": user_id, **user_name, **user_contacts}
+
+
+class GroupsMicroservice:
+    @staticmethod
+    def get_all_groups(
+        offset: int, limit: int, group_name: Optional[str]
+    ) -> GroupGetDtoPaginated:
+        """
+        TODO: replace with call to `GET groups/`
+        TODO: pass through offset, limit, and search query parameters
+        TODO: preserve pagination links returned from the Groups microservice
+        """
+        groups = []
+        for group in fake_group_data:
+            group_data = copy.deepcopy(group["data"])
+
+            # Add group members
+            group_data["members"] = GroupsMicroservice.get_group_members(
+                group_data["group_id"]
+            )
+
+            fake_pagination_links = [
+                {
+                    "href": "...",
+                    "rel": "get_next_group_page",
+                    "type": "GET",
+                },
+                {
+                    "href": "...",
+                    "rel": "get_prev_group_page",
+                    "type": "GET",
+                },
+            ]
+
+            groups.append(group_data)
+
+        return {"data": groups, "links": fake_pagination_links}
+
+    @staticmethod
+    def get_single_group(group_id: int) -> GroupGetDto:
+        """
+        TODO: replace with call to `GET groups/{group_id}`
+        """
+        group = list(
+            filter(lambda group: group["data"]["group_id"] == group_id, fake_group_data)
+        )[0]
+        group_copy = copy.deepcopy(group)
+
+        # Add group members
+        group_copy["data"]["members"] = GroupsMicroservice.get_group_members(group_id)
+
+        return group_copy
+
+    @staticmethod
+    def get_group_members(group_id: int) -> List[UserInfo]:
+        """
+        TODO: replace with call to `GET groups/{group_id}/members`
+        """
+        members = fake_group_members[str(group_id)]["data"]
+
+        # Return members with name and contact info
+        return [get_user_info(member["member_id"]) for member in members]
+
+    @staticmethod
+    def create_group(group: GroupPostDto) -> GroupGetDto:
+        """
+        TODO: replace with call to `POST groups/`
+        """
+        global next_group_id
+
+        new_group = {
+            "data": {
+                "group_name": group.group_name,
+                "group_capacity": group.group_capacity,
+                "group_id": next_group_id,
+                "links": [
+                    {
+                        "href": f"/groups/{next_group_id}",
+                        "rel": "delete_group",
+                        "type": "DELETE",
+                    },
+                ],
+            }
+        }
+
+        fake_group_data.append(new_group)
+        fake_group_members[str(next_group_id)] = {"data": []}
+
+        next_group_id += 1
+
+        # Call get_single_group as a shortcut for returning the proper schema
+        return GroupsMicroservice.get_single_group(next_group_id - 1)
+
+    @staticmethod
+    def update_group(group_id: int, updated_props: GroupPostDto) -> GroupGetDto:
+        """
+        TODO: replace with call to `PUT groups/{group_id}`
+        """
+        curr_group = list(
+            filter(lambda group: group["data"]["group_id"] == group_id, fake_group_data)
+        )[0]
+
+        if updated_props.group_capacity is not None:
+            curr_group["data"]["group_capacity"] = updated_props.group_capacity
+
+        if updated_props.group_name is not None:
+            curr_group["data"]["group_name"] = updated_props.group_name
+
+        # Call get_single_group as a shortcut for returning the proper schema
+        return GroupsMicroservice.get_single_group(group_id)
+
+    @staticmethod
+    def delete_group(group_id: int) -> None:
+        """
+        TODO: replace with call to `DELETE groups/{group_id}`
+        """
+        global fake_group_data
+
+        fake_group_data = list(
+            filter(lambda group: group["data"]["group_id"] != group_id, fake_group_data)
+        )
+
+
+class UserMicroservice:
+    @staticmethod
+    def get_user_name(user_id: int):
+        """
+        TODO: replace with call to `GET /users/{id}`
+        """
+        user_data = list(
+            filter(lambda user: user["data"]["uid"] == user_id, fake_user_data)
+        )[0]["data"]
+
+        # Do it like this in case the User microservice returns more than just name
+        name = {
+            "first_name": user_data["first_name"],
+            "last_name": user_data["last_name"],
+        }
+
+        return name
 
 
 class ContactsMicroservice:

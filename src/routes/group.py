@@ -8,7 +8,12 @@ from fastapi import APIRouter
 from src.core_microservice import GroupsMicroservice
 
 # Local application imports
-from src.schema.group import GroupGetDto, GroupGetDtoPaginated
+from src.schema.group import (
+    GroupGetDto,
+    GroupGetDtoPaginated,
+    GroupPostDto,
+    GroupPutDto,
+)
 
 
 router = APIRouter(prefix="/groups", tags=["groups"])
@@ -29,3 +34,18 @@ def get_all_groups(
 @router.get("/{group_id}", response_model=GroupGetDto)
 def get_one_group(group_id: int):
     return GroupsMicroservice.get_single_group(group_id)
+
+
+@router.post("/", response_model=GroupGetDto)
+def create_group(group: GroupPostDto):
+    return GroupsMicroservice.create_group(group)
+
+
+@router.put("/{group_id}", response_model=GroupGetDto)
+def update_group(group_id: int, updated_props: GroupPutDto):
+    return GroupsMicroservice.update_group(group_id, updated_props)
+
+
+@router.delete("/{group_id}", status_code=204)
+def delete_group(group_id: int):
+    GroupsMicroservice.delete_group(group_id)

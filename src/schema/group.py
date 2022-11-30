@@ -50,14 +50,31 @@ class UserInfo(BaseModel):
     zip_code: str
 
 
-class GroupDto(BaseModel):
+class GroupBaseDto(BaseModel):
+    """Shared group properties."""
+
+    group_name: str
+    group_capacity: int
+
+
+class GroupDto(GroupBaseDto):
     """Group properties with links."""
 
     group_id: int
-    group_name: str
-    group_capacity: int
     members: List[UserInfo]
     links: List[Union[DeleteGroupLink, None]]
+
+
+class GroupPostDto(GroupBaseDto):
+    """Group properties for creating a new group."""
+
+    pass
+
+
+class GroupPutDto(GroupBaseDto):
+    """Group properties for updating a group."""
+
+    pass
 
 
 class GroupGetDto(BaseModel):
