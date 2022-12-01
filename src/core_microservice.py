@@ -309,6 +309,9 @@ class ContactsMicroservice:
 
         return contacts
 
+    # @staticmethod
+    # def update_user_contacts(user_id: int, updated_props: GroupPostDto) -> GroupGetDto:
+
     @staticmethod
     def __get_user_email(user_id: int):
         """

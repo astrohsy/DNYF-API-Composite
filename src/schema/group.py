@@ -50,6 +50,14 @@ class UserInfo(BaseModel):
     zip_code: str
 
 
+class UserGetDto(UserInfo):
+    pass
+
+
+class UserPostDto(UserInfo):
+    pass
+
+
 class GroupBaseDto(BaseModel):
     """Shared group properties."""
 
