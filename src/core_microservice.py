@@ -293,6 +293,10 @@ class UserMicroservice:
 
         return name
 
+    @staticmethod
+    def get_user_info_id(user_id: int):
+        return get_user_info(user_id)
+
 
 class ContactsMicroservice:
     @staticmethod
