@@ -281,6 +281,19 @@ class GroupsMicroservice:
             filter(lambda group: group["data"]["group_id"] != group_id, fake_group_data)
         )
 
+    @staticmethod
+    def add_user_to_group(group_id: int, user_email: str) -> GroupGetDto:
+        """
+        TODO: replace with call to `POST groups/{group_id}/members`
+        Note: the request body is {"member_id": 123}
+        """
+
+        user_id = ContactsMicroservice.get_user_id(user_email)
+
+        fake_group_members[str(group_id)]["data"].append({"member_id": user_id})
+
+        return GroupsMicroservice.get_single_group(group_id)
+
 
 class UserMicroservice:
     @staticmethod
@@ -372,6 +385,17 @@ class ContactsMicroservice:
         ContactsMicroservice.__update_user_zipcode(user_id, updated_props.zip_code)
 
         return UserMicroservice.get_user_info_id(user_id)
+
+    @staticmethod
+    def get_user_id(user_email: str) -> str:
+        """
+        TODO: replace with call to `GET /contacts/{email}/id`
+        """
+        data = list(
+            filter(lambda user: user["data"]["email"] == user_email, fake_contacts_data)
+        )[0]["data"]
+
+        return data["uid"]
 
     @staticmethod
     def __get_user_email(user_id: str) -> str:

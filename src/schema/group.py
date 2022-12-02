@@ -63,6 +63,12 @@ class GroupPostDto(GroupBaseDto):
     pass
 
 
+class GroupPostMemberDto(BaseModel):
+    """Properties for adding a user to a group."""
+
+    user_email: str
+
+
 class GroupPutDto(GroupBaseDto):
     """Group properties for updating a group."""
 
