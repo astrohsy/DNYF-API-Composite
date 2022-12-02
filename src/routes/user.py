@@ -8,9 +8,6 @@ from src.schema.user import UserGetDto, UserPutDto
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-DEFAULT_OFFSET = 0
-DEFAULT_LIMIT = 100
-
 
 @router.get("/{user_id}", response_model=UserGetDto)
 def get_one_user(user_id: int):
@@ -21,4 +18,5 @@ def get_one_user(user_id: int):
 def update_user(user_id: int, updated_props: UserPutDto):
     UserMicroservice.update_name(user_id, updated_props)
     ContactsMicroservice.update_user_contacts(user_id, updated_props)
+
     return UserMicroservice.get_user_info_id(user_id)

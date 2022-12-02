@@ -306,6 +306,9 @@ class UserMicroservice:
 
     @staticmethod
     def update_name(user_id: int, updated_props: NamePutDto) -> UserGetDto:
+        """
+        TODO: replace with call to `PUT /users/{id}`
+        """
         user_data = list(
             filter(lambda user: user["data"]["uid"] == user_id, fake_user_data)
         )[0]["data"]
@@ -332,23 +335,15 @@ class ContactsMicroservice:
 
     @staticmethod
     def update_user_contacts(user_id: int, updated_props: ContactPutDto) -> UserGetDto:
-        data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
-        )[0]["data"]
 
-        if updated_props.email is not None:
-            data["email"] = updated_props.email
-
-        if updated_props.phone is not None:
-            data["phone"] = updated_props.phone
-
-        if updated_props.zip_code is not None:
-            data["zip_code"] = updated_props.zip_code
+        ContactsMicroservice.__update_user_email(user_id, updated_props.email)
+        ContactsMicroservice.__update_user_phone(user_id, updated_props.phone)
+        ContactsMicroservice.__update_user_zipcode(user_id, updated_props.zip_code)
 
         return UserMicroservice.get_user_info_id(user_id)
 
     @staticmethod
-    def __get_user_email(user_id: int):
+    def __get_user_email(user_id: int) -> str:
         """
         TODO: replace with call to `GET /contacts/{id}/email`
         """
@@ -359,7 +354,19 @@ class ContactsMicroservice:
         return data["email"]
 
     @staticmethod
-    def __get_user_phone(user_id: int):
+    def __update_user_email(user_id: int, email: str) -> None:
+        """
+        TODO: replace with call to `PUT /contacts/{id}/email`
+        """
+        data = list(
+            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
+        )[0]["data"]
+
+        if email is not None:
+            data["email"] = email
+
+    @staticmethod
+    def __get_user_phone(user_id: int) -> str:
         """
         TODO: replace with call to `GET /contacts/{id}/phone`
         """
@@ -370,12 +377,36 @@ class ContactsMicroservice:
         return data["phone"]
 
     @staticmethod
-    def __get_user_zipcode(user_id: int):
+    def __update_user_phone(user_id: int, phone: str) -> None:
         """
-        TODO: replace with call to `GET /contacts/{id}/zip_code` (?)
+        TODO: replace with call to `PUT /contacts/{id}/phone`
+        """
+        data = list(
+            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
+        )[0]["data"]
+
+        if phone is not None:
+            data["phone"] = phone
+
+    @staticmethod
+    def __get_user_zipcode(user_id: int) -> str:
+        """
+        TODO: replace with call to `GET /contacts/{id}/zip_code`
         """
         data = list(
             filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
         )[0]["data"]
 
         return data["zip_code"]
+
+    @staticmethod
+    def __update_user_zipcode(user_id: int, zip_code: str) -> None:
+        """
+        TODO: replace with call to `PUT /contacts/{id}/zip_code`
+        """
+        data = list(
+            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
+        )[0]["data"]
+
+        if zip_code is not None:
+            data["zip_code"] = zip_code
