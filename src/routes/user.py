@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from src.core_microservice import UserMicroservice, ContactsMicroservice
 
-from src.schema.group import UserGetDto, UserPutDto
+from src.schema.user import UserGetDto, UserPutDto
 
 
 router = APIRouter(prefix="/users")

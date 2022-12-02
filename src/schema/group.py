@@ -50,34 +50,6 @@ class UserInfo(BaseModel):
     zip_code: str
 
 
-class UserGetDto(UserInfo):
-    pass
-
-
-class UserPostDto(UserInfo):
-    pass
-
-
-class UserPutDto(UserInfo):
-    id: Union[int, None] = None
-    first_name: Union[str, None] = None
-    last_name: Union[str, None] = None
-    phone: Union[str, None] = None
-    email: Union[str, None] = None
-    zip_code: Union[str, None] = None
-
-
-class NamePutDto(UserInfo):
-    first_name: Union[str, None] = None
-    last_name: Union[str, None] = None
-
-
-class ContactPutDto(UserInfo):
-    phone: Union[str, None] = None
-    email: Union[str, None] = None
-    zip_code: Union[str, None] = None
-
-
 class GroupBaseDto(BaseModel):
     """Shared group properties."""
 

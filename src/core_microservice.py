@@ -4,19 +4,18 @@ Wrappers of core microservices.
 TODO: Methods returning fake data to be replaced with actual calls to microservices
 """
 
+# Standard library imports
 import copy
 from typing import List, Optional
 
+# Local application imports
 from src.schema.group import (
     GroupGetDto,
     GroupGetDtoPaginated,
     GroupPostDto,
-    UserGetDto,
-    ContactPutDto,
-    NamePutDto,
     GroupPutDto,
 )
-
+from src.schema.user import UserGetDto, ContactPutDto, NamePutDto
 
 # START FAKE DATA
 next_group_id = 4
