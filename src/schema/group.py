@@ -58,6 +58,26 @@ class UserPostDto(UserInfo):
     pass
 
 
+class UserPutDto(UserInfo):
+    id: Union[int, None] = None
+    first_name: Union[str, None] = None
+    last_name: Union[str, None] = None
+    phone: Union[str, None] = None
+    email: Union[str, None] = None
+    zip_code: Union[str, None] = None
+
+
+class NamePutDto(UserInfo):
+    first_name: Union[str, None] = None
+    last_name: Union[str, None] = None
+
+
+class ContactPutDto(UserInfo):
+    phone: Union[str, None] = None
+    email: Union[str, None] = None
+    zip_code: Union[str, None] = None
+
+
 class GroupBaseDto(BaseModel):
     """Shared group properties."""
 
@@ -82,7 +102,8 @@ class GroupPostDto(GroupBaseDto):
 class GroupPutDto(GroupBaseDto):
     """Group properties for updating a group."""
 
-    pass
+    group_name: Union[str, None] = None
+    group_capacity: Union[int, None] = None
 
 
 class GroupGetDto(BaseModel):
