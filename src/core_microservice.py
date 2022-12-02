@@ -15,7 +15,7 @@ from src.schema.group import (
     GroupPostDto,
     GroupPutDto,
 )
-from src.schema.user import UserGetDto, ContactPutDto, NamePutDto
+from src.schema.user import UserGetDto, ContactPutDto, NamePutDto, UserPostDto
 
 # START FAKE DATA
 next_group_id = 4
@@ -69,30 +69,30 @@ fake_group_members = {
     "1": {
         "data": [
             {
-                "member_id": 1,
+                "member_id": "1",
             },
             {
-                "member_id": 2,
+                "member_id": "2",
             },
         ]
     },
     "2": {
         "data": [
             {
-                "member_id": 2,
+                "member_id": "2",
             },
             {
-                "member_id": 3,
+                "member_id": "3",
             },
         ]
     },
     "3": {
         "data": [
             {
-                "member_id": 1,
+                "member_id": "1",
             },
             {
-                "member_id": 3,
+                "member_id": "3",
             },
         ]
     },
@@ -101,21 +101,21 @@ fake_group_members = {
 fake_user_data = [
     {
         "data": {
-            "uid": 1,
+            "uid": "1",
             "first_name": "A",
             "last_name": "A",
         }
     },
     {
         "data": {
-            "uid": 2,
+            "uid": "2",
             "first_name": "B",
             "last_name": "B",
         }
     },
     {
         "data": {
-            "uid": 3,
+            "uid": "3",
             "first_name": "C",
             "last_name": "C",
         }
@@ -125,7 +125,7 @@ fake_user_data = [
 fake_contacts_data = [
     {
         "data": {
-            "uid": 1,
+            "uid": "1",
             "email": "abc@abc",
             "phone": "123-456-789",
             "zip_code": "12345",
@@ -133,7 +133,7 @@ fake_contacts_data = [
     },
     {
         "data": {
-            "uid": 2,
+            "uid": "2",
             "email": "qwe@qwe",
             "phone": "456-567-678",
             "zip_code": "45678",
@@ -141,7 +141,7 @@ fake_contacts_data = [
     },
     {
         "data": {
-            "uid": 3,
+            "uid": "3",
             "email": "tyu@tyu",
             "phone": "234-345-125",
             "zip_code": "78906",
@@ -151,7 +151,7 @@ fake_contacts_data = [
 # END FAKE DATA
 
 
-def get_user_info(user_id: int):
+def get_user_info(user_id: str):
     """
     Helper function for returning user information from User and Contacts microservices
     """
@@ -284,7 +284,7 @@ class GroupsMicroservice:
 
 class UserMicroservice:
     @staticmethod
-    def get_user_name(user_id: int):
+    def get_user_name(user_id: str):
         """
         TODO: replace with call to `GET /users/{id}`
         """
@@ -301,11 +301,26 @@ class UserMicroservice:
         return name
 
     @staticmethod
-    def get_user_info_id(user_id: int) -> UserGetDto:
+    def create_user(user_id: str, props: UserPostDto):
+        """
+        TODO: replace with call to `POST /users/{id}`
+        """
+        new_user = {
+            "data": {
+                "uid": user_id,
+                "first_name": props.first_name,
+                "last_name": props.last_name,
+            }
+        }
+
+        fake_user_data.append(new_user)
+
+    @staticmethod
+    def get_user_info_id(user_id: str) -> UserGetDto:
         return get_user_info(user_id)
 
     @staticmethod
-    def update_name(user_id: int, updated_props: NamePutDto) -> UserGetDto:
+    def update_name(user_id: str, updated_props: NamePutDto) -> UserGetDto:
         """
         TODO: replace with call to `PUT /users/{id}`
         """
@@ -324,7 +339,7 @@ class UserMicroservice:
 
 class ContactsMicroservice:
     @staticmethod
-    def get_user_contacts(user_id: int):
+    def get_user_contacts(user_id: str):
         contacts = {
             "email": ContactsMicroservice.__get_user_email(user_id),
             "phone": ContactsMicroservice.__get_user_phone(user_id),
@@ -334,7 +349,23 @@ class ContactsMicroservice:
         return contacts
 
     @staticmethod
-    def update_user_contacts(user_id: int, updated_props: ContactPutDto) -> UserGetDto:
+    def create_user_contacts(user_id: str, props: UserPostDto):
+        """
+        TODO: replace with call to `POST /contacts/{id}`
+        """
+        new_contacts = {
+            "data": {
+                "uid": user_id,
+                "email": props.email,
+                "phone": props.phone,
+                "zip_code": props.zip_code,
+            }
+        }
+
+        fake_contacts_data.append(new_contacts)
+
+    @staticmethod
+    def update_user_contacts(user_id: str, updated_props: ContactPutDto) -> UserGetDto:
 
         ContactsMicroservice.__update_user_email(user_id, updated_props.email)
         ContactsMicroservice.__update_user_phone(user_id, updated_props.phone)
@@ -343,7 +374,7 @@ class ContactsMicroservice:
         return UserMicroservice.get_user_info_id(user_id)
 
     @staticmethod
-    def __get_user_email(user_id: int) -> str:
+    def __get_user_email(user_id: str) -> str:
         """
         TODO: replace with call to `GET /contacts/{id}/email`
         """
@@ -354,7 +385,7 @@ class ContactsMicroservice:
         return data["email"]
 
     @staticmethod
-    def __update_user_email(user_id: int, email: str) -> None:
+    def __update_user_email(user_id: str, email: str) -> None:
         """
         TODO: replace with call to `PUT /contacts/{id}/email`
         """
@@ -366,7 +397,7 @@ class ContactsMicroservice:
             data["email"] = email
 
     @staticmethod
-    def __get_user_phone(user_id: int) -> str:
+    def __get_user_phone(user_id: str) -> str:
         """
         TODO: replace with call to `GET /contacts/{id}/phone`
         """
@@ -377,7 +408,7 @@ class ContactsMicroservice:
         return data["phone"]
 
     @staticmethod
-    def __update_user_phone(user_id: int, phone: str) -> None:
+    def __update_user_phone(user_id: str, phone: str) -> None:
         """
         TODO: replace with call to `PUT /contacts/{id}/phone`
         """
@@ -389,7 +420,7 @@ class ContactsMicroservice:
             data["phone"] = phone
 
     @staticmethod
-    def __get_user_zipcode(user_id: int) -> str:
+    def __get_user_zipcode(user_id: str) -> str:
         """
         TODO: replace with call to `GET /contacts/{id}/zip_code`
         """
@@ -400,7 +431,7 @@ class ContactsMicroservice:
         return data["zip_code"]
 
     @staticmethod
-    def __update_user_zipcode(user_id: int, zip_code: str) -> None:
+    def __update_user_zipcode(user_id: str, zip_code: str) -> None:
         """
         TODO: replace with call to `PUT /contacts/{id}/zip_code`
         """
