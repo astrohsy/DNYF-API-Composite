@@ -4,11 +4,18 @@ Wrappers of core microservices.
 TODO: Methods returning fake data to be replaced with actual calls to microservices
 """
 
+# Standard library imports
 import copy
 from typing import List, Optional
 
-from src.schema.group import GroupGetDto, GroupGetDtoPaginated, GroupPostDto, UserInfo
-
+# Local application imports
+from src.schema.group import (
+    GroupGetDto,
+    GroupGetDtoPaginated,
+    GroupPostDto,
+    GroupPutDto,
+)
+from src.schema.user import UserGetDto, ContactPutDto, NamePutDto
 
 # START FAKE DATA
 next_group_id = 4
@@ -206,7 +213,7 @@ class GroupsMicroservice:
         return group_copy
 
     @staticmethod
-    def get_group_members(group_id: int) -> List[UserInfo]:
+    def get_group_members(group_id: int) -> List[UserGetDto]:
         """
         TODO: replace with call to `GET groups/{group_id}/members`
         """
@@ -246,7 +253,7 @@ class GroupsMicroservice:
         return GroupsMicroservice.get_single_group(next_group_id - 1)
 
     @staticmethod
-    def update_group(group_id: int, updated_props: GroupPostDto) -> GroupGetDto:
+    def update_group(group_id: int, updated_props: GroupPutDto) -> GroupGetDto:
         """
         TODO: replace with call to `PUT groups/{group_id}`
         """
@@ -293,6 +300,24 @@ class UserMicroservice:
 
         return name
 
+    @staticmethod
+    def get_user_info_id(user_id: int) -> UserGetDto:
+        return get_user_info(user_id)
+
+    @staticmethod
+    def update_name(user_id: int, updated_props: NamePutDto) -> UserGetDto:
+        user_data = list(
+            filter(lambda user: user["data"]["uid"] == user_id, fake_user_data)
+        )[0]["data"]
+
+        if updated_props.first_name is not None:
+            user_data["first_name"] = updated_props.first_name
+
+        if updated_props.last_name is not None:
+            user_data["last_name"] = updated_props.last_name
+
+        return UserMicroservice.get_user_info_id(user_id)
+
 
 class ContactsMicroservice:
     @staticmethod
@@ -304,6 +329,23 @@ class ContactsMicroservice:
         }
 
         return contacts
+
+    @staticmethod
+    def update_user_contacts(user_id: int, updated_props: ContactPutDto) -> UserGetDto:
+        data = list(
+            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
+        )[0]["data"]
+
+        if updated_props.email is not None:
+            data["email"] = updated_props.email
+
+        if updated_props.phone is not None:
+            data["phone"] = updated_props.phone
+
+        if updated_props.zip_code is not None:
+            data["zip_code"] = updated_props.zip_code
+
+        return UserMicroservice.get_user_info_id(user_id)
 
     @staticmethod
     def __get_user_email(user_id: int):

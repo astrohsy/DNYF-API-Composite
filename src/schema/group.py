@@ -1,9 +1,12 @@
 # Standard library imports
 from enum import Enum
+from typing import List, Union
 
 # Third party imports
 from pydantic import BaseModel
-from typing import List, Union
+
+# Local application imports
+from src.schema.user import UserGetDto
 
 
 class HTTPMethod(str, Enum):
@@ -39,17 +42,6 @@ class PrevPageLink(Link):
     type = HTTPMethod.get
 
 
-class UserInfo(BaseModel):
-    """User properties"""
-
-    id: int
-    first_name: str
-    last_name: str
-    phone: str
-    email: str
-    zip_code: str
-
-
 class GroupBaseDto(BaseModel):
     """Shared group properties."""
 
@@ -61,7 +53,7 @@ class GroupDto(GroupBaseDto):
     """Group properties with links."""
 
     group_id: int
-    members: List[UserInfo]
+    members: List[UserGetDto]
     links: List[Union[DeleteGroupLink, None]]
 
 
@@ -74,7 +66,8 @@ class GroupPostDto(GroupBaseDto):
 class GroupPutDto(GroupBaseDto):
     """Group properties for updating a group."""
 
-    pass
+    group_name: Union[str, None] = None
+    group_capacity: Union[int, None] = None
 
 
 class GroupGetDto(BaseModel):
