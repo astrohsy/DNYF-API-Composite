@@ -1,11 +1,12 @@
+# Third party imports
 from fastapi import APIRouter
 
+# Local application imports
 from src.core_microservice import UserMicroservice, ContactsMicroservice
-
 from src.schema.user import UserGetDto, UserPutDto
 
 
-router = APIRouter(prefix="/users")
+router = APIRouter(prefix="/users", tags=["users"])
 
 DEFAULT_OFFSET = 0
 DEFAULT_LIMIT = 100

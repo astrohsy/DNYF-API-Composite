@@ -1,20 +1,20 @@
 # Standard library imports
 from typing import Union
 
-# Local application imports
-from src.schema.group import UserInfo
+# Third party imports
+from pydantic import BaseModel
 
 
-class UserGetDto(UserInfo):
-    pass
+class UserGetDto(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    phone: str
+    email: str
+    zip_code: str
 
 
-class UserPostDto(UserInfo):
-    pass
-
-
-class UserPutDto(UserInfo):
-    id: Union[int, None] = None
+class UserPutDto(BaseModel):
     first_name: Union[str, None] = None
     last_name: Union[str, None] = None
     phone: Union[str, None] = None
@@ -22,12 +22,12 @@ class UserPutDto(UserInfo):
     zip_code: Union[str, None] = None
 
 
-class NamePutDto(UserInfo):
+class NamePutDto(BaseModel):
     first_name: Union[str, None] = None
     last_name: Union[str, None] = None
 
 
-class ContactPutDto(UserInfo):
+class ContactPutDto(BaseModel):
     phone: Union[str, None] = None
     email: Union[str, None] = None
     zip_code: Union[str, None] = None
