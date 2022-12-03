@@ -12,6 +12,7 @@ from src.schema.group import (
     GroupGetDto,
     GroupGetDtoPaginated,
     GroupPostDto,
+    GroupPostMemberDto,
     GroupPutDto,
 )
 
@@ -49,3 +50,10 @@ def update_group(group_id: int, updated_props: GroupPutDto):
 @router.delete("/{group_id}", status_code=204)
 def delete_group(group_id: int):
     GroupsMicroservice.delete_group(group_id)
+
+
+@router.post("/{group_id}/members", response_model=GroupGetDto)
+def add_user_to_group(group_id: int, req_body: GroupPostMemberDto):
+    user_email = req_body.user_email
+
+    return GroupsMicroservice.add_user_to_group(group_id, user_email)
