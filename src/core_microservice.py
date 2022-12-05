@@ -222,33 +222,17 @@ class GroupsMicroservice:
 
     @staticmethod
     def create_group(group: GroupPostDto) -> GroupGetDto:
-        """
-        TODO: replace with call to `POST groups/`
-        """
-        global next_group_id
-
-        new_group = {
-            "data": {
-                "group_name": group.group_name,
-                "group_capacity": group.group_capacity,
-                "group_id": next_group_id,
-                "links": [
-                    {
-                        "href": f"/groups/{next_group_id}",
-                        "rel": "delete_group",
-                        "type": "DELETE",
-                    },
-                ],
-            }
+        payload = {
+            "group_name": group.group_name,
+            "group_capacity": group.group_capacity,
         }
 
-        fake_group_data.append(new_group)
-        fake_group_members[str(next_group_id)] = {"data": []}
-
-        next_group_id += 1
+        res = requests.post(f'{GROUP_MICROSERVICE_URL}/api/groups/', json=payload).json()
+        print(res)
+        new_id = res["data"]["group_id"]
 
         # Call get_single_group as a shortcut for returning the proper schema
-        return GroupsMicroservice.get_single_group(next_group_id - 1)
+        return GroupsMicroservice.get_single_group(new_id)
 
     @staticmethod
     def update_group(group_id: int, updated_props: GroupPutDto) -> GroupGetDto:
