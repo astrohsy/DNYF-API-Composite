@@ -228,7 +228,6 @@ class GroupsMicroservice:
         }
 
         res = requests.post(f'{GROUP_MICROSERVICE_URL}/api/groups/', json=payload).json()
-        print(res)
         new_id = res["data"]["group_id"]
 
         # Call get_single_group as a shortcut for returning the proper schema
@@ -236,18 +235,10 @@ class GroupsMicroservice:
 
     @staticmethod
     def update_group(group_id: int, updated_props: GroupPutDto) -> GroupGetDto:
-        """
-        TODO: replace with call to `PUT groups/{group_id}`
-        """
-        curr_group = list(
-            filter(lambda group: group["data"]["group_id"] == group_id, fake_group_data)
-        )[0]
-
-        if updated_props.group_capacity is not None:
-            curr_group["data"]["group_capacity"] = updated_props.group_capacity
-
-        if updated_props.group_name is not None:
-            curr_group["data"]["group_name"] = updated_props.group_name
+        requests.put(
+            f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}',
+            json=updated_props.dict(exclude_none=True)
+        )
 
         # Call get_single_group as a shortcut for returning the proper schema
         return GroupsMicroservice.get_single_group(group_id)
