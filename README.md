@@ -24,6 +24,12 @@ flake8 . --count --statistics
 docker-compose -f docker-compose.yml up --build
 ```
 
+Start core microservices (assuming all microservice repos are in the same folder):
+
+```bash
+docker-compose -f ../DNYF-API-Group/docker-compose.yml up --build
+```
+
 To start the API using a local Python environment:
 ```
 uvicorn src.app:app --reload

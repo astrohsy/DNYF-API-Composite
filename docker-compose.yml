@@ -12,3 +12,9 @@ services:
       - 8010:8010
     volumes:
       - ./:/app
+    networks:
+      - dnyfcomposite
+
+networks:
+  dnyfcomposite:
+    external: true
