@@ -8,6 +8,9 @@ TODO: Methods returning fake data to be replaced with actual calls to microservi
 import copy
 from typing import List, Optional
 
+# Third party imports
+import requests
+
 # Local application imports
 from src.schema.group import (
     GroupGetDto,
@@ -16,6 +19,8 @@ from src.schema.group import (
     GroupPutDto,
 )
 from src.schema.user import UserGetDto, ContactPutDto, NamePutDto, UserPostDto
+from src.config import settings
+
 
 # START FAKE DATA
 next_group_id = 4
@@ -101,21 +106,21 @@ fake_group_members = {
 fake_user_data = [
     {
         "data": {
-            "uid": "1",
+            "uid": "sample1",
             "first_name": "A",
             "last_name": "A",
         }
     },
     {
         "data": {
-            "uid": "2",
+            "uid": "sample2",
             "first_name": "B",
             "last_name": "B",
         }
     },
     {
         "data": {
-            "uid": "3",
+            "uid": "sample3",
             "first_name": "C",
             "last_name": "C",
         }
@@ -125,7 +130,7 @@ fake_user_data = [
 fake_contacts_data = [
     {
         "data": {
-            "uid": "1",
+            "uid": "sample1",
             "email": "abc@abc",
             "phone": "123-456-789",
             "zip_code": "12345",
@@ -133,7 +138,7 @@ fake_contacts_data = [
     },
     {
         "data": {
-            "uid": "2",
+            "uid": "sample2",
             "email": "qwe@qwe",
             "phone": "456-567-678",
             "zip_code": "45678",
@@ -141,7 +146,7 @@ fake_contacts_data = [
     },
     {
         "data": {
-            "uid": "3",
+            "uid": "sample3",
             "email": "tyu@tyu",
             "phone": "234-345-125",
             "zip_code": "78906",
@@ -150,6 +155,8 @@ fake_contacts_data = [
 ]
 # END FAKE DATA
 
+
+GROUP_MICROSERVICE_URL = settings.group_microservice_url
 
 def get_user_info(user_id: str):
     """
@@ -199,28 +206,19 @@ class GroupsMicroservice:
 
     @staticmethod
     def get_single_group(group_id: int) -> GroupGetDto:
-        """
-        TODO: replace with call to `GET groups/{group_id}`
-        """
-        group = list(
-            filter(lambda group: group["data"]["group_id"] == group_id, fake_group_data)
-        )[0]
-        group_copy = copy.deepcopy(group)
+        group = requests.get(f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}').json()
 
         # Add group members
-        group_copy["data"]["members"] = GroupsMicroservice.get_group_members(group_id)
+        group["data"]["members"] = GroupsMicroservice.get_group_members(group_id)
 
-        return group_copy
+        return group
 
     @staticmethod
     def get_group_members(group_id: int) -> List[UserGetDto]:
-        """
-        TODO: replace with call to `GET groups/{group_id}/members`
-        """
-        members = fake_group_members[str(group_id)]["data"]
+        members = requests.get(f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members').json()
 
         # Return members with name and contact info
-        return [get_user_info(member["member_id"]) for member in members]
+        return [get_user_info(member["member_id"]) for member in members["data"]]
 
     @staticmethod
     def create_group(group: GroupPostDto) -> GroupGetDto:
