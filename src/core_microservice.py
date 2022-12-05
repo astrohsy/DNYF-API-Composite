@@ -249,14 +249,12 @@ class GroupsMicroservice:
 
     @staticmethod
     def add_user_to_group(group_id: int, user_email: str) -> GroupGetDto:
-        """
-        TODO: replace with call to `POST groups/{group_id}/members`
-        Note: the request body is {"member_id": 123}
-        """
-
         user_id = ContactsMicroservice.get_user_id(user_email)
 
-        fake_group_members[str(group_id)]["data"].append({"member_id": user_id})
+        requests.post(
+            f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members',
+            json={"member_id": user_id}
+        )
 
         return GroupsMicroservice.get_single_group(group_id)
 
