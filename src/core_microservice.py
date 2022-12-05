@@ -23,8 +23,6 @@ from src.config import settings
 
 
 # START FAKE DATA
-next_group_id = 4
-
 fake_group_data = [
     {
         "data": {
@@ -69,39 +67,6 @@ fake_group_data = [
         }
     },
 ]
-
-fake_group_members = {
-    "1": {
-        "data": [
-            {
-                "member_id": "1",
-            },
-            {
-                "member_id": "2",
-            },
-        ]
-    },
-    "2": {
-        "data": [
-            {
-                "member_id": "2",
-            },
-            {
-                "member_id": "3",
-            },
-        ]
-    },
-    "3": {
-        "data": [
-            {
-                "member_id": "1",
-            },
-            {
-                "member_id": "3",
-            },
-        ]
-    },
-}
 
 fake_user_data = [
     {
@@ -157,6 +122,7 @@ fake_contacts_data = [
 
 
 GROUP_MICROSERVICE_URL = settings.group_microservice_url
+
 
 def get_user_info(user_id: str):
     """
@@ -215,7 +181,9 @@ class GroupsMicroservice:
 
     @staticmethod
     def get_group_members(group_id: int) -> List[UserGetDto]:
-        members = requests.get(f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members').json()
+        members = requests.get(
+            f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members'
+        ).json()
 
         # Return members with name and contact info
         return [get_user_info(member["member_id"]) for member in members["data"]]
@@ -227,7 +195,10 @@ class GroupsMicroservice:
             "group_capacity": group.group_capacity,
         }
 
-        res = requests.post(f'{GROUP_MICROSERVICE_URL}/api/groups/', json=payload).json()
+        res = requests.post(
+            f'{GROUP_MICROSERVICE_URL}/api/groups/',
+            json=payload
+        ).json()
         new_id = res["data"]["group_id"]
 
         # Call get_single_group as a shortcut for returning the proper schema
