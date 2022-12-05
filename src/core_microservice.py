@@ -245,14 +245,7 @@ class GroupsMicroservice:
 
     @staticmethod
     def delete_group(group_id: int) -> None:
-        """
-        TODO: replace with call to `DELETE groups/{group_id}`
-        """
-        global fake_group_data
-
-        fake_group_data = list(
-            filter(lambda group: group["data"]["group_id"] != group_id, fake_group_data)
-        )
+        requests.delete(f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}')
 
     @staticmethod
     def add_user_to_group(group_id: int, user_email: str) -> GroupGetDto:
