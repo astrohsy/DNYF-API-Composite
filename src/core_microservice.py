@@ -5,7 +5,6 @@ TODO: Methods returning fake data to be replaced with actual calls to microservi
 """
 
 # Standard library imports
-import copy
 from typing import List, Optional
 
 # Third party imports
