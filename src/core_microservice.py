@@ -23,51 +23,6 @@ from src.config import settings
 
 
 # START FAKE DATA
-fake_group_data = [
-    {
-        "data": {
-            "group_name": "OS Group",
-            "group_capacity": 2,
-            "group_id": 1,
-            "links": [
-                {
-                    "href": "/groups/1",
-                    "rel": "delete_group",
-                    "type": "DELETE",
-                },
-            ],
-        }
-    },
-    {
-        "data": {
-            "group_name": "ASE Group",
-            "group_capacity": 4,
-            "group_id": 2,
-            "links": [
-                {
-                    "href": "/groups/2",
-                    "rel": "delete_group",
-                    "type": "DELETE",
-                },
-            ],
-        }
-    },
-    {
-        "data": {
-            "group_name": "PLT Group",
-            "group_capacity": 3,
-            "group_id": 3,
-            "links": [
-                {
-                    "href": "/groups/3",
-                    "rel": "delete_group",
-                    "type": "DELETE",
-                },
-            ],
-        }
-    },
-]
-
 fake_user_data = [
     {
         "data": {
@@ -139,40 +94,20 @@ class GroupsMicroservice:
     def get_all_groups(
         offset: int, limit: int, group_name: Optional[str]
     ) -> GroupGetDtoPaginated:
-        """
-        TODO: replace with call to `GET groups/`
-        TODO: pass through offset, limit, and search query parameters
-        TODO: preserve pagination links returned from the Groups microservice
-        """
-        groups = []
-        for group in fake_group_data:
-            group_data = copy.deepcopy(group["data"])
+        query_params = {"offset": offset, "limit": limit, "group_name": group_name}
+        res = requests.get(
+            f"{GROUP_MICROSERVICE_URL}/api/groups/", params=query_params
+        ).json()
 
+        for group in res["data"]:
             # Add group members
-            group_data["members"] = GroupsMicroservice.get_group_members(
-                group_data["group_id"]
-            )
+            group["members"] = GroupsMicroservice.get_group_members(group["group_id"])
 
-            fake_pagination_links = [
-                {
-                    "href": "...",
-                    "rel": "get_next_group_page",
-                    "type": "GET",
-                },
-                {
-                    "href": "...",
-                    "rel": "get_prev_group_page",
-                    "type": "GET",
-                },
-            ]
-
-            groups.append(group_data)
-
-        return {"data": groups, "links": fake_pagination_links}
+        return res
 
     @staticmethod
     def get_single_group(group_id: int) -> GroupGetDto:
-        group = requests.get(f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}').json()
+        group = requests.get(f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}").json()
 
         # Add group members
         group["data"]["members"] = GroupsMicroservice.get_group_members(group_id)
@@ -182,7 +117,7 @@ class GroupsMicroservice:
     @staticmethod
     def get_group_members(group_id: int) -> List[UserGetDto]:
         members = requests.get(
-            f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members'
+            f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members"
         ).json()
 
         # Return members with name and contact info
@@ -196,8 +131,7 @@ class GroupsMicroservice:
         }
 
         res = requests.post(
-            f'{GROUP_MICROSERVICE_URL}/api/groups/',
-            json=payload
+            f"{GROUP_MICROSERVICE_URL}/api/groups/", json=payload
         ).json()
         new_id = res["data"]["group_id"]
 
@@ -207,8 +141,8 @@ class GroupsMicroservice:
     @staticmethod
     def update_group(group_id: int, updated_props: GroupPutDto) -> GroupGetDto:
         requests.put(
-            f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}',
-            json=updated_props.dict(exclude_none=True)
+            f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}",
+            json=updated_props.dict(exclude_none=True),
         )
 
         # Call get_single_group as a shortcut for returning the proper schema
@@ -216,15 +150,15 @@ class GroupsMicroservice:
 
     @staticmethod
     def delete_group(group_id: int) -> None:
-        requests.delete(f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}')
+        requests.delete(f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}")
 
     @staticmethod
     def add_user_to_group(group_id: int, user_email: str) -> GroupGetDto:
         user_id = ContactsMicroservice.get_user_id(user_email)
 
         requests.post(
-            f'{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members',
-            json={"member_id": user_id}
+            f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members",
+            json={"member_id": user_id},
         )
 
         return GroupsMicroservice.get_single_group(group_id)
