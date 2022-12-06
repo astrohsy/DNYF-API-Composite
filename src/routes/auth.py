@@ -29,7 +29,7 @@ oauth.register(
     client_kwargs={"scope": "openid email profile"},
 )
 
-router = APIRouter(tags=["login"])
+router = APIRouter(tags=["auth"])
 
 
 async def get_oauth_userinfo(token: str = Depends(oauth2_scheme)):
