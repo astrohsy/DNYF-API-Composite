@@ -2,7 +2,7 @@
 
 
 # Third party imports
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request
 from authlib.integrations.starlette_client import OAuth
 from starlette.config import Config
 import jwt

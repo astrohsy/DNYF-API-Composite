@@ -34,5 +34,5 @@ async def get_oauth_userinfo(token: str = Depends(oauth2_scheme)):
         field_names = [field.name for field in fields(OAuthUserInfo)]
         filtered = {k: decode[k] for k in field_names}
         return OAuthUserInfo(**filtered)
-    except:
+    except Exception as e:
         raise HTTPException(status_code=401, detail="Not Authorized")
