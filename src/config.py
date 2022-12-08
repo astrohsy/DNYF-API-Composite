@@ -15,12 +15,14 @@ class Settings(BaseSettings):
 
 
 class ProdSettings(Settings):
+    group_microservice_url = "TBD"
+
     class Config:
         env_prefix = "PROD_"
 
 
 class DevSettings(Settings):
-    pass
+    group_microservice_url = "http://dnyf-groups-microservice:8101"
 
 
 if os.getenv("PROD_FLAG"):
