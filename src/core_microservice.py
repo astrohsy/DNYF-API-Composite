@@ -179,18 +179,16 @@ class UserMicroservice:
 
     @staticmethod
     def create_user(user_id: str, props: UserPostDto):
-        """
-        TODO: replace with call to `POST /users/{id}`
-        """
         new_user = {
-            "data": {
-                "uid": user_id,
-                "first_name": props.first_name,
-                "last_name": props.last_name,
-            }
+            "uid": user_id,
+            "first_name": props.first_name,
+            "last_name": props.last_name,
         }
 
-        fake_user_data.append(new_user)
+        requests.post(
+            f"{USERS_MICROSERVICE_URL}/users",
+            json=new_user,
+        )
 
     @staticmethod
     def get_user_info_id(user_id: str) -> UserGetDto:

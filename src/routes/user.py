@@ -1,5 +1,6 @@
-# Local application imports
+# Standard library imports
 from uuid import uuid4
+from time import sleep
 
 # Third party imports
 from fastapi import APIRouter
@@ -27,9 +28,15 @@ def update_user(user_id: str, updated_props: UserPutDto):
 
 @router.post("/", response_model=UserGetDto)
 def create_user(props: UserPostDto):
+    """
+    Use sleep() as a workaround to make sure that
+    core microservices have time to process requests
+    """
     user_id = str(uuid4())
 
     UserMicroservice.create_user(user_id, props)
+    sleep(0.5)
     ContactsMicroservice.create_user_contacts(user_id, props)
+    sleep(0.5)
 
     return UserMicroservice.get_user_info_id(user_id)
