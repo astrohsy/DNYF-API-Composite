@@ -195,21 +195,11 @@ class UserMicroservice:
         return get_user_info(user_id)
 
     @staticmethod
-    def update_name(user_id: str, updated_props: NamePutDto) -> UserGetDto:
-        """
-        TODO: replace with call to `PUT /users/{id}`
-        """
-        user_data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_user_data)
-        )[0]["data"]
-
-        if updated_props.first_name is not None:
-            user_data["first_name"] = updated_props.first_name
-
-        if updated_props.last_name is not None:
-            user_data["last_name"] = updated_props.last_name
-
-        return UserMicroservice.get_user_info_id(user_id)
+    def update_name(user_id: str, updated_props: NamePutDto) -> None:
+        requests.put(
+            f"{USERS_MICROSERVICE_URL}/users/{user_id}",
+            json=updated_props.dict(exclude_none=True),
+        )
 
 
 class ContactsMicroservice:
@@ -240,13 +230,10 @@ class ContactsMicroservice:
         fake_contacts_data.append(new_contacts)
 
     @staticmethod
-    def update_user_contacts(user_id: str, updated_props: ContactPutDto) -> UserGetDto:
-
+    def update_user_contacts(user_id: str, updated_props: ContactPutDto) -> None:
         ContactsMicroservice.__update_user_email(user_id, updated_props.email)
         ContactsMicroservice.__update_user_phone(user_id, updated_props.phone)
         ContactsMicroservice.__update_user_zipcode(user_id, updated_props.zip_code)
-
-        return UserMicroservice.get_user_info_id(user_id)
 
     @staticmethod
     def get_user_id(user_email: str) -> str:

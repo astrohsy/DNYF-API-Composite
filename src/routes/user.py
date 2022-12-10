@@ -20,20 +20,23 @@ def get_one_user(user_id: str):
 
 @router.put("/{user_id}", response_model=UserGetDto)
 def update_user(user_id: str, updated_props: UserPutDto):
+    # Use sleep() as a workaround to make sure that
+    # core microservices have time to process requests
+
     UserMicroservice.update_name(user_id, updated_props)
+    sleep(0.5)
     ContactsMicroservice.update_user_contacts(user_id, updated_props)
+    sleep(0.5)
 
     return UserMicroservice.get_user_info_id(user_id)
 
 
 @router.post("/", response_model=UserGetDto)
 def create_user(props: UserPostDto):
-    """
-    Use sleep() as a workaround to make sure that
-    core microservices have time to process requests
-    """
     user_id = str(uuid4())
 
+    # Use sleep() as a workaround to make sure that
+    # core microservices have time to process requests
     UserMicroservice.create_user(user_id, props)
     sleep(0.5)
     ContactsMicroservice.create_user_contacts(user_id, props)
