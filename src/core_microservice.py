@@ -76,6 +76,7 @@ fake_contacts_data = [
 
 
 GROUP_MICROSERVICE_URL = settings.group_microservice_url
+USERS_MICROSERVICE_URL = settings.users_microservice_url
 
 
 def get_user_info(user_id: str):
@@ -166,17 +167,12 @@ class GroupsMicroservice:
 class UserMicroservice:
     @staticmethod
     def get_user_name(user_id: str):
-        """
-        TODO: replace with call to `GET /users/{id}`
-        """
-        user_data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_user_data)
-        )[0]["data"]
+        res = requests.get(f"{USERS_MICROSERVICE_URL}/users/{user_id}").json()
 
         # Do it like this in case the User microservice returns more than just name
         name = {
-            "first_name": user_data["first_name"],
-            "last_name": user_data["last_name"],
+            "first_name": res["first_name"],
+            "last_name": res["last_name"],
         }
 
         return name

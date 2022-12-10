@@ -30,6 +30,10 @@ Start core microservices (assuming all microservice repos are in the same folder
 docker-compose -f ../DNYF-API-Group/docker-compose.yml up --build
 ```
 
+```bash
+docker-compose -f ../DNYF-User-API/docker-compose.yml up --build
+```
+
 To start the API using a local Python environment:
 ```
 uvicorn src.app:app --reload

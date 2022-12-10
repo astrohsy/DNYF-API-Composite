@@ -16,6 +16,7 @@ class Settings(BaseSettings):
 
 class ProdSettings(Settings):
     group_microservice_url = "TBD"
+    users_microservice_url = "TBD"
 
     class Config:
         env_prefix = "PROD_"
@@ -23,6 +24,7 @@ class ProdSettings(Settings):
 
 class DevSettings(Settings):
     group_microservice_url = "http://dnyf-groups-microservice:8101"
+    users_microservice_url = "http://dnyf-users-microservice:4103"
 
 
 if os.getenv("PROD_FLAG"):
