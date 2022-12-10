@@ -5,18 +5,19 @@ import jwt
 
 # Local application imports
 from src.config import settings
+from typing import Optional
 
 
 @dataclass
 class OAuthUserInfo:
     email: str
     email_verified: bool
-    exp: int
     given_name: str
     locale: str
     name: str
     picture: str
     sub: str
+    exp: Optional[int]
 
 
 # OAuth settings
@@ -32,7 +33,7 @@ async def get_oauth_userinfo(token: str = Depends(oauth2_scheme)):
             audience=settings.google_client_id,
         )
         field_names = [field.name for field in fields(OAuthUserInfo)]
-        filtered = {k: decode[k] for k in field_names}
+        filtered = {k: decode.get(k, None) for k in field_names}
         return OAuthUserInfo(**filtered)
     except Exception:
         raise HTTPException(status_code=401, detail="Not Authorized")
