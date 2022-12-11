@@ -1,7 +1,5 @@
 """
 Wrappers of core microservices.
-
-TODO: Methods returning fake data to be replaced with actual calls to microservices
 """
 
 # Standard library imports
@@ -77,6 +75,7 @@ fake_contacts_data = [
 
 GROUP_MICROSERVICE_URL = settings.group_microservice_url
 USERS_MICROSERVICE_URL = settings.users_microservice_url
+CONTACTS_MICROSERVICE_URL = settings.contacts_microservice_url
 
 
 def get_user_info(user_id: str):
@@ -215,19 +214,17 @@ class ContactsMicroservice:
 
     @staticmethod
     def create_user_contacts(user_id: str, props: UserPostDto):
-        """
-        TODO: replace with call to `POST /contacts/{id}`
-        """
         new_contacts = {
-            "data": {
-                "uid": user_id,
-                "email": props.email,
-                "phone": props.phone,
-                "zip_code": props.zip_code,
-            }
+            "uid": user_id,
+            "email": props.email,
+            "phone": props.phone,
+            "zip_code": props.zip_code,
         }
 
-        fake_contacts_data.append(new_contacts)
+        requests.post(
+            f"{CONTACTS_MICROSERVICE_URL}/contacts",
+            json=new_contacts,
+        )
 
     @staticmethod
     def update_user_contacts(user_id: str, updated_props: ContactPutDto) -> None:
@@ -237,80 +234,55 @@ class ContactsMicroservice:
 
     @staticmethod
     def get_user_id(user_email: str) -> str:
-        """
-        TODO: replace with call to `GET /contacts/{email}/id`
-        """
-        data = list(
-            filter(lambda user: user["data"]["email"] == user_email, fake_contacts_data)
-        )[0]["data"]
+        payload = {"email": user_email}
+        res = requests.get(
+            f"{CONTACTS_MICROSERVICE_URL}/contacts/email/uid", json=payload
+        ).json()
 
-        return data["uid"]
+        return res["data"]["uid"]
 
     @staticmethod
     def __get_user_email(user_id: str) -> str:
-        """
-        TODO: replace with call to `GET /contacts/{id}/email`
-        """
-        data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
-        )[0]["data"]
+        res = requests.get(
+            f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/email"
+        ).json()
 
-        return data["email"]
+        return res["data"]["email"]
 
     @staticmethod
     def __update_user_email(user_id: str, email: str) -> None:
-        """
-        TODO: replace with call to `PUT /contacts/{id}/email`
-        """
-        data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
-        )[0]["data"]
-
         if email is not None:
-            data["email"] = email
+            requests.put(
+                f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/email",
+                json={"email": email},
+            )
 
     @staticmethod
     def __get_user_phone(user_id: str) -> str:
-        """
-        TODO: replace with call to `GET /contacts/{id}/phone`
-        """
-        data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
-        )[0]["data"]
+        res = requests.get(
+            f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/phone"
+        ).json()
 
-        return data["phone"]
+        return res["data"]["phone_number"]
 
     @staticmethod
     def __update_user_phone(user_id: str, phone: str) -> None:
-        """
-        TODO: replace with call to `PUT /contacts/{id}/phone`
-        """
-        data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
-        )[0]["data"]
-
         if phone is not None:
-            data["phone"] = phone
+            requests.put(
+                f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/phone",
+                json={"phone_number": phone},
+            )
 
     @staticmethod
     def __get_user_zipcode(user_id: str) -> str:
-        """
-        TODO: replace with call to `GET /contacts/{id}/zip_code`
-        """
-        data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
-        )[0]["data"]
+        res = requests.get(f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/zip").json()
 
-        return data["zip_code"]
+        return res["data"]["zip_code"]
 
     @staticmethod
     def __update_user_zipcode(user_id: str, zip_code: str) -> None:
-        """
-        TODO: replace with call to `PUT /contacts/{id}/zip_code`
-        """
-        data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
-        )[0]["data"]
-
         if zip_code is not None:
-            data["zip_code"] = zip_code
+            requests.put(
+                f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/zip",
+                json={"zip_code": zip_code},
+            )
