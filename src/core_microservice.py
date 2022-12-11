@@ -77,6 +77,7 @@ fake_contacts_data = [
 
 GROUP_MICROSERVICE_URL = settings.group_microservice_url
 USERS_MICROSERVICE_URL = settings.users_microservice_url
+CONTACTS_MICROSERVICE_URL = settings.contacts_microservice_url
 
 
 def get_user_info(user_id: str):
@@ -248,14 +249,11 @@ class ContactsMicroservice:
 
     @staticmethod
     def __get_user_email(user_id: str) -> str:
-        """
-        TODO: replace with call to `GET /contacts/{id}/email`
-        """
-        data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
-        )[0]["data"]
+        res = requests.get(
+            f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/email"
+        ).json()
 
-        return data["email"]
+        return res["data"]["email"]
 
     @staticmethod
     def __update_user_email(user_id: str, email: str) -> None:
@@ -271,14 +269,11 @@ class ContactsMicroservice:
 
     @staticmethod
     def __get_user_phone(user_id: str) -> str:
-        """
-        TODO: replace with call to `GET /contacts/{id}/phone`
-        """
-        data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
-        )[0]["data"]
+        res = requests.get(
+            f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/phone"
+        ).json()
 
-        return data["phone"]
+        return res["data"]["phone_number"]
 
     @staticmethod
     def __update_user_phone(user_id: str, phone: str) -> None:
@@ -294,14 +289,9 @@ class ContactsMicroservice:
 
     @staticmethod
     def __get_user_zipcode(user_id: str) -> str:
-        """
-        TODO: replace with call to `GET /contacts/{id}/zip_code`
-        """
-        data = list(
-            filter(lambda user: user["data"]["uid"] == user_id, fake_contacts_data)
-        )[0]["data"]
+        res = requests.get(f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/zip").json()
 
-        return data["zip_code"]
+        return res["data"]["zip_code"]
 
     @staticmethod
     def __update_user_zipcode(user_id: str, zip_code: str) -> None:
