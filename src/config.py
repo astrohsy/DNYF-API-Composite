@@ -10,6 +10,11 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
+    jwt_secret_key: str
+    google_client_id: str
+    google_client_secret: str
+    debug: bool
+
     class Config:
         env_file = ".env"
 

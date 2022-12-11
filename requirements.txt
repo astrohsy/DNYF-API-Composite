@@ -23,3 +23,8 @@ uvicorn==0.20.0
 uvloop==0.17.0
 watchfiles==0.18.1
 websockets==10.4
+pyjwt[crypto]==2.6.0
+Authlib==1.1.0
+httpx==0.23.1
+Starlette==0.22.0
+itsdangerous==2.1.2
