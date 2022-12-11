@@ -216,19 +216,17 @@ class ContactsMicroservice:
 
     @staticmethod
     def create_user_contacts(user_id: str, props: UserPostDto):
-        """
-        TODO: replace with call to `POST /contacts/{id}`
-        """
         new_contacts = {
-            "data": {
-                "uid": user_id,
-                "email": props.email,
-                "phone": props.phone,
-                "zip_code": props.zip_code,
-            }
+            "uid": user_id,
+            "email": props.email,
+            "phone": props.phone,
+            "zip_code": props.zip_code,
         }
 
-        fake_contacts_data.append(new_contacts)
+        requests.post(
+            f"{CONTACTS_MICROSERVICE_URL}/contacts",
+            json=new_contacts,
+        )
 
     @staticmethod
     def update_user_contacts(user_id: str, updated_props: ContactPutDto) -> None:
