@@ -236,14 +236,12 @@ class ContactsMicroservice:
 
     @staticmethod
     def get_user_id(user_email: str) -> str:
-        """
-        TODO: replace with call to `GET /contacts/{email}/id`
-        """
-        data = list(
-            filter(lambda user: user["data"]["email"] == user_email, fake_contacts_data)
-        )[0]["data"]
+        payload = {"email": user_email}
+        res = requests.get(
+            f"{CONTACTS_MICROSERVICE_URL}/contacts/email/uid", json=payload
+        ).json()
 
-        return data["uid"]
+        return res["data"]["uid"]
 
     @staticmethod
     def __get_user_email(user_id: str) -> str:
