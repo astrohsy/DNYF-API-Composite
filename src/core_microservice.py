@@ -118,7 +118,8 @@ class GroupsMicroservice:
         members = requests.get(
             f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members"
         ).json()
-
+        print("================\n=================\n==============")
+        print(members)
         # Return members with name and contact info
         return [get_user_info(member["member_id"]) for member in members["data"]]
 
@@ -245,9 +246,11 @@ class ContactsMicroservice:
     def __get_user_email(user_id: str) -> str:
         res = requests.get(
             f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/email"
-        ).json()
+        )
+        if (res.status_code // 100 != 2):
+            raise res.raise_for_status()
 
-        return res["data"]["email"]
+        return res.json()["data"]["email"]
 
     @staticmethod
     def __update_user_email(user_id: str, email: str) -> None:
