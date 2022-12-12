@@ -118,6 +118,7 @@ class GroupsMicroservice:
         members = requests.get(
             f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members"
         ).json()
+        print(members)
         # Return members with name and contact info
         return [get_user_info(member["member_id"]) for member in members["data"]]
 
