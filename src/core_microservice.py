@@ -243,10 +243,8 @@ class ContactsMicroservice:
 
     @staticmethod
     def __get_user_email(user_id: str) -> str:
-        res = requests.get(
-            f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/email"
-        )
-        if (res.status_code // 100 != 2):
+        res = requests.get(f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/email")
+        if res.status_code // 100 != 2:
             raise res.raise_for_status()
 
         return res.json()["data"]["email"]
