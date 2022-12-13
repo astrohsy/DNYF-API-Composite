@@ -43,3 +43,7 @@ def create_user(props: UserPostDto):
     sleep(0.5)
 
     return UserMicroservice.get_user_info_id(user_id)
+
+@router.post("/{email}/id", response_model=UserGetDto)
+def lookup_user_id(email: str):
+    return ContactsMicroservice.get_user_id(email)
