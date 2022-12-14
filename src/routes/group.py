@@ -74,3 +74,12 @@ def add_user_to_group(
     user_email = req_body.user_email
 
     return GroupsMicroservice.add_user_to_group(group_id, user_email)
+
+@router.delete("/{group_id}/members/{email}", status_code=204)
+def remove_user_from_group(
+    group_id: int,
+    email: str,
+    oauth_user_info: OAuthUserInfo = Depends(get_oauth_userinfo),
+):
+    # TODO: Add user_id verification
+    return GroupsMicroservice.remove_user_from_group(group_id, email)

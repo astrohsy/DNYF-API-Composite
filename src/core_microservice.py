@@ -162,6 +162,16 @@ class GroupsMicroservice:
 
         return GroupsMicroservice.get_single_group(group_id)
 
+    @staticmethod
+    def remove_user_from_group(group_id: int, user_email: str) -> GroupGetDto:
+        user_id = ContactsMicroservice.get_user_id(user_email)
+
+        requests.delete(
+            f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members/{user_id}"
+        )
+
+        return GroupsMicroservice.get_single_group(group_id)
+
 
 class UserMicroservice:
     @staticmethod
