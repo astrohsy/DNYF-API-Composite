@@ -7,7 +7,7 @@ from fastapi import APIRouter
 
 # Local application imports
 from src.core_microservice import UserMicroservice, ContactsMicroservice
-from src.schema.user import UserGetDto, UserPostDto, UserPutDto, UserGetIdByEmailDto
+from src.schema.user import UserGetDto, UserPostDto, UserPutDto
 
 
 router = APIRouter(prefix="/users", tags=["users"])
