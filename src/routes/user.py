@@ -7,7 +7,7 @@ from fastapi import APIRouter
 
 # Local application imports
 from src.core_microservice import UserMicroservice, ContactsMicroservice
-from src.schema.user import UserGetDto, UserPostDto, UserPutDto
+from src.schema.user import UserGetDto, UserPostDto, UserPutDto, UserGetIdByEmailDto
 
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -45,6 +45,6 @@ def create_user(props: UserPostDto):
     return UserMicroservice.get_user_info_id(user_id)
 
 
-@router.post("/{email}/id", response_model=UserGetDto)
+@router.get("/{email}/id")
 def lookup_user_id(email: str):
-    return ContactsMicroservice.get_user_id(email)
+    return {"uid": ContactsMicroservice.get_user_id(email)}
