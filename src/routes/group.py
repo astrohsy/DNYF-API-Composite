@@ -28,23 +28,21 @@ DEFAULT_LIMIT = 100
 def get_all_groups(
     offset: int = DEFAULT_OFFSET,
     limit: int = DEFAULT_LIMIT,
-    group_name: Optional[str] = None,
-    oauth_user_info: OAuthUserInfo = Depends(get_oauth_userinfo),
+    group_name: Optional[str] = None
 ):
-    print(oauth_user_info)
     return GroupsMicroservice.get_all_groups(offset, limit, group_name)
 
 
 @router.get("/{group_id}", response_model=GroupGetDto)
 def get_one_group(
-    group_id: int, oauth_user_info: OAuthUserInfo = Depends(get_oauth_userinfo)
+    group_id: int
 ):
     return GroupsMicroservice.get_single_group(group_id)
 
 
 @router.post("/", response_model=GroupGetDto)
 def create_group(
-    group: GroupPostDto, oauth_user_info: OAuthUserInfo = Depends(get_oauth_userinfo)
+    group: GroupPostDto
 ):
     return GroupsMicroservice.create_group(group)
 
@@ -53,14 +51,13 @@ def create_group(
 def update_group(
     group_id: int,
     updated_props: GroupPutDto,
-    oauth_user_info: OAuthUserInfo = Depends(get_oauth_userinfo),
 ):
     return GroupsMicroservice.update_group(group_id, updated_props)
 
 
 @router.delete("/{group_id}", status_code=204)
 def delete_group(
-    group_id: int, oauth_user_info: OAuthUserInfo = Depends(get_oauth_userinfo)
+    group_id: int
 ):
     GroupsMicroservice.delete_group(group_id)
 
@@ -69,7 +66,6 @@ def delete_group(
 def add_user_to_group(
     group_id: int,
     req_body: GroupPostMemberDto,
-    oauth_user_info: OAuthUserInfo = Depends(get_oauth_userinfo),
 ):
     user_email = req_body.user_email
 
@@ -80,7 +76,6 @@ def add_user_to_group(
 def remove_user_from_group(
     group_id: int,
     email: str,
-    oauth_user_info: OAuthUserInfo = Depends(get_oauth_userinfo),
 ):
     # TODO: Add user_id verification
     return GroupsMicroservice.remove_user_from_group(group_id, email)
