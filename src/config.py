@@ -20,7 +20,9 @@ class Settings(BaseSettings):
 
 
 class ProdSettings(Settings):
-    group_microservice_url = "http://dnyf-group-api-prod.eba-qphypccx.us-east-1.elasticbeanstalk.com"
+    group_microservice_url = (
+        "http://dnyf-group-api-prod.eba-qphypccx.us-east-1.elasticbeanstalk.com"
+    )
     users_microservice_url = "http://ec2-174-129-190-40.compute-1.amazonaws.com:4103"
     contacts_microservice_url = "http://ec2-174-129-190-40.compute-1.amazonaws.com:5005"
 
