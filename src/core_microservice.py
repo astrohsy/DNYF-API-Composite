@@ -4,6 +4,7 @@ Wrappers of core microservices.
 
 # Standard library imports
 from typing import List, Optional
+from time import sleep
 
 # Third party imports
 import requests
@@ -89,7 +90,10 @@ def get_user_info(user_id: str):
     user_name = UserMicroservice.get_user_name(user_id)
     user_contacts = ContactsMicroservice.get_user_contacts(user_id)
 
-    return {"id": user_id, **user_name, **user_contacts}
+    res = {"id": user_id, **user_name, **user_contacts}
+    print(f'get_user_info({user_id}) = {res}')
+
+    return res
 
 
 class GroupsMicroservice:
@@ -102,6 +106,8 @@ class GroupsMicroservice:
             f"{GROUP_MICROSERVICE_URL}/api/groups/", params=query_params
         ).json()
 
+        print(f'get_all_groups() = {res}')
+
         for group in res["data"]:
             # Add group members
             group["members"] = GroupsMicroservice.get_group_members(group["group_id"])
@@ -111,6 +117,8 @@ class GroupsMicroservice:
     @staticmethod
     def get_single_group(group_id: int) -> GroupGetDto:
         group = requests.get(f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}").json()
+
+        print(f'get_single_group({group_id}) = {group}')
 
         # Add group members
         group["data"]["members"] = GroupsMicroservice.get_group_members(group_id)
@@ -122,7 +130,9 @@ class GroupsMicroservice:
         members = requests.get(
             f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members"
         ).json()
-        print(members)
+
+        print(f'get_group_members({group_id}) = {members}')
+
         # Return members with name and contact info
         return [get_user_info(member["member_id"]) for member in members["data"]]
 
@@ -136,6 +146,9 @@ class GroupsMicroservice:
         res = requests.post(
             f"{GROUP_MICROSERVICE_URL}/api/groups/", json=payload
         ).json()
+
+        print(f'create_group() = {res}')
+
         new_id = res["data"]["group_id"]
 
         # Call get_single_group as a shortcut for returning the proper schema
