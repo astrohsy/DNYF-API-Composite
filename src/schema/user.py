@@ -39,3 +39,7 @@ class ContactPutDto(BaseModel):
     phone: Union[str, None] = None
     email: Union[str, None] = None
     zip_code: Union[str, None] = None
+
+
+class UserGetIdByEmailDto(BaseModel):
+    uid: Union[str, None] = None

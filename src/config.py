@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     jwt_secret_key: str
     google_client_id: str
     google_client_secret: str
+    auth0_client_id: str
+    auth0_public_key: str
     debug: bool
 
     class Config:

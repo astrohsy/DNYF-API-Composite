@@ -77,9 +77,9 @@ GROUP_MICROSERVICE_URL = settings.group_microservice_url
 USERS_MICROSERVICE_URL = settings.users_microservice_url
 CONTACTS_MICROSERVICE_URL = settings.contacts_microservice_url
 
-print(f'{GROUP_MICROSERVICE_URL=}')
-print(f'{USERS_MICROSERVICE_URL=}')
-print(f'{CONTACTS_MICROSERVICE_URL=}')
+print(f"{GROUP_MICROSERVICE_URL=}")
+print(f"{USERS_MICROSERVICE_URL=}")
+print(f"{CONTACTS_MICROSERVICE_URL=}")
 
 
 def get_user_info(user_id: str):
@@ -122,7 +122,7 @@ class GroupsMicroservice:
         members = requests.get(
             f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members"
         ).json()
-
+        print(members)
         # Return members with name and contact info
         return [get_user_info(member["member_id"]) for member in members["data"]]
 
@@ -162,6 +162,16 @@ class GroupsMicroservice:
         requests.post(
             f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members",
             json={"member_id": user_id},
+        )
+
+        return GroupsMicroservice.get_single_group(group_id)
+
+    @staticmethod
+    def remove_user_from_group(group_id: int, user_email: str) -> GroupGetDto:
+        user_id = ContactsMicroservice.get_user_id(user_email)
+
+        requests.delete(
+            f"{GROUP_MICROSERVICE_URL}/api/groups/{group_id}/members/{user_id}"
         )
 
         return GroupsMicroservice.get_single_group(group_id)
@@ -247,11 +257,11 @@ class ContactsMicroservice:
 
     @staticmethod
     def __get_user_email(user_id: str) -> str:
-        res = requests.get(
-            f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/email"
-        ).json()
+        res = requests.get(f"{CONTACTS_MICROSERVICE_URL}/contacts/{user_id}/email")
+        if res.status_code // 100 != 2:
+            raise res.raise_for_status()
 
-        return res["data"]["email"]
+        return res.json()["data"]["email"]
 
     @staticmethod
     def __update_user_email(user_id: str, email: str) -> None:

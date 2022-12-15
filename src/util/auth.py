@@ -28,9 +28,9 @@ async def get_oauth_userinfo(token: str = Depends(oauth2_scheme)):
     try:
         decode = jwt.decode(
             token,
-            settings.jwt_secret_key,
-            algorithms=["HS256"],
-            audience=settings.google_client_id,
+            settings.auth0_public_key,
+            audience=settings.auth0_client_id,
+            algorithms=["RS256"],
         )
         field_names = [field.name for field in fields(OAuthUserInfo)]
         filtered = {k: decode.get(k, None) for k in field_names}
