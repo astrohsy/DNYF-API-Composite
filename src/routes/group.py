@@ -75,6 +75,7 @@ def add_user_to_group(
 
     return GroupsMicroservice.add_user_to_group(group_id, user_email)
 
+
 @router.delete("/{group_id}/members/{email}", status_code=204)
 def remove_user_from_group(
     group_id: int,
