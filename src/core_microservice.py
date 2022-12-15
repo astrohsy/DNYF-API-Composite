@@ -77,9 +77,9 @@ GROUP_MICROSERVICE_URL = settings.group_microservice_url
 USERS_MICROSERVICE_URL = settings.users_microservice_url
 CONTACTS_MICROSERVICE_URL = settings.contacts_microservice_url
 
-print(f'{GROUP_MICROSERVICE_URL=}')
-print(f'{USERS_MICROSERVICE_URL=}')
-print(f'{CONTACTS_MICROSERVICE_URL=}')
+print(f"{GROUP_MICROSERVICE_URL=}")
+print(f"{USERS_MICROSERVICE_URL=}")
+print(f"{CONTACTS_MICROSERVICE_URL=}")
 
 
 def get_user_info(user_id: str):
