@@ -31,7 +31,7 @@ def update_user(user_id: str, updated_props: UserPutDto):
     return UserMicroservice.get_user_info_id(user_id)
 
 
-@router.post("/", response_model=UserGetDto)
+@router.post("", response_model=UserGetDto)
 def create_user(props: UserPostDto):
     user_id = str(uuid4())
 

@@ -24,7 +24,7 @@ DEFAULT_OFFSET = 0
 DEFAULT_LIMIT = 100
 
 
-@router.get("/", response_model=GroupGetDtoPaginated)
+@router.get("", response_model=GroupGetDtoPaginated)
 def get_all_groups(
     offset: int = DEFAULT_OFFSET,
     limit: int = DEFAULT_LIMIT,
@@ -42,7 +42,7 @@ def get_one_group(
     return GroupsMicroservice.get_single_group(group_id)
 
 
-@router.post("/", response_model=GroupGetDto)
+@router.post("", response_model=GroupGetDto)
 def create_group(
     group: GroupPostDto, oauth_user_info: OAuthUserInfo = Depends(get_oauth_userinfo)
 ):
