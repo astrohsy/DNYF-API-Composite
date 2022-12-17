@@ -25,6 +25,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 async def get_oauth_userinfo(token: str = Depends(oauth2_scheme)):
+    return None
     try:
         decode = jwt.decode(
             token,
