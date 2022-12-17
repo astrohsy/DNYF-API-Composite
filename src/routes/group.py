@@ -31,7 +31,6 @@ def get_all_groups(
     group_name: Optional[str] = None,
     #oauth_user_info: OAuthUserInfo = Depends(get_oauth_userinfo),
 ):
-    print(oauth_user_info)
     return GroupsMicroservice.get_all_groups(offset, limit, group_name)
 
 
