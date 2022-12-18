@@ -7,6 +7,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     environment:
+      PROD_FLAG: 1
       UVICORN_PORT: "8010"
     ports:
       - 8010:8010
