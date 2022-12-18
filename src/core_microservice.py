@@ -19,60 +19,6 @@ from src.schema.user import UserGetDto, ContactPutDto, NamePutDto, UserPostDto
 from src.config import settings
 
 
-# START FAKE DATA
-fake_user_data = [
-    {
-        "data": {
-            "uid": "sample1",
-            "first_name": "A",
-            "last_name": "A",
-        }
-    },
-    {
-        "data": {
-            "uid": "sample2",
-            "first_name": "B",
-            "last_name": "B",
-        }
-    },
-    {
-        "data": {
-            "uid": "sample3",
-            "first_name": "C",
-            "last_name": "C",
-        }
-    },
-]
-
-fake_contacts_data = [
-    {
-        "data": {
-            "uid": "sample1",
-            "email": "abc@abc",
-            "phone": "123-456-789",
-            "zip_code": "12345",
-        }
-    },
-    {
-        "data": {
-            "uid": "sample2",
-            "email": "qwe@qwe",
-            "phone": "456-567-678",
-            "zip_code": "45678",
-        }
-    },
-    {
-        "data": {
-            "uid": "sample3",
-            "email": "tyu@tyu",
-            "phone": "234-345-125",
-            "zip_code": "78906",
-        }
-    },
-]
-# END FAKE DATA
-
-
 GROUP_MICROSERVICE_URL = settings.group_microservice_url
 USERS_MICROSERVICE_URL = settings.users_microservice_url
 CONTACTS_MICROSERVICE_URL = settings.contacts_microservice_url
