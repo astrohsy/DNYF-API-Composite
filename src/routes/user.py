@@ -3,7 +3,7 @@ from uuid import uuid4
 from time import sleep
 
 # Third party imports
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 # Local application imports
 from src.core_microservice import UserMicroservice, ContactsMicroservice
@@ -35,12 +35,11 @@ def update_user(user_id: str, updated_props: UserPutDto):
 def create_user(props: UserPostDto):
     user_id = str(uuid4())
 
-    # Use sleep() as a workaround to make sure that
-    # core microservices have time to process requests
-    UserMicroservice.create_user(user_id, props)
-    sleep(0.5)
-    ContactsMicroservice.create_user_contacts(user_id, props)
-    sleep(0.5)
+    status_code = ContactsMicroservice.create_user_contacts(user_id, props)
+    if status_code == 400:
+        raise HTTPException(status_code=400, detail="Invalid zip code")
+    else:
+        UserMicroservice.create_user(user_id, props)
 
     return UserMicroservice.get_user_info_id(user_id)
 
