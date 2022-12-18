@@ -231,14 +231,16 @@ class ContactsMicroservice:
         new_contacts = {
             "uid": user_id,
             "email": props.email,
-            "phone": props.phone,
+            "phone_number": props.phone,
             "zip_code": props.zip_code,
         }
 
-        requests.post(
+        res = requests.post(
             f"{CONTACTS_MICROSERVICE_URL}/contacts",
             json=new_contacts,
         )
+
+        return res.status_code
 
     @staticmethod
     def update_user_contacts(user_id: str, updated_props: ContactPutDto) -> None:
