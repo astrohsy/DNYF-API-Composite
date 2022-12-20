@@ -25,12 +25,11 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 async def get_oauth_userinfo(token: str = Depends(oauth2_scheme)):
-    return None
     try:
         decode = jwt.decode(
             token,
             settings.auth0_public_key,
-            audience=settings.auth0_client_id,
+            audience=settings.auth0_audience,
             algorithms=["RS256"],
         )
         field_names = [field.name for field in fields(OAuthUserInfo)]

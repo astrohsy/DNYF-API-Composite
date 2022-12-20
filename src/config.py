@@ -10,6 +10,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
+    auth0_audience: str
     jwt_secret_key: str
     google_client_id: str
     google_client_secret: str
